@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Form Input Data P2TEL</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Anda bisa menambahkan styling tambahan di sini jika diperlukan */
+        .card-header.bg-info {
+            background-color: #17a2b8 !important; /* Contoh warna lain untuk header anak */
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-4">
+        <h2 class="text-center mb-4">Input Data P2TEL - Jakarta Selatan</h2>
+        <form method="POST" action="/submit">
+            <div class="card mb-4">
+                <div class="card-header bg-warning fw-bold">DATA ANGGOTA</div>
+                <div class="card-body row g-3">
+                    <div class="col-md-6"><label>NIK</label><input name="NIK" type="text" class="form-control" required value="{{ data['NIK'] if data else '' }}"></div>
+                    <div class="col-md-6"><label>Nama</label><input name="nama" type="text" class="form-control" required value="{{ data['nama'] if data else '' }}"></div>
+                    <div class="col-md-6"><label>Tgl Lahir</label><input name="tgl_lahir" type="date" class="form-control" required value="{{ data['tgl_lahir'] if data else '' }}"></div>
+                    <div class="col-md-6"><label>Status</label><input name="status" type="text" class="form-control" required value="{{ data['status'] if data else '' }}"></div>
+                    <div class="col-md-6"><label>NPWP</label><input name="NPWP" type="text" class="form-control" required value="{{ data['NPWP'] if data else '' }}"></div>
+                    <div class="col-md-6"><label>Gol Darah</label><input name="gol_darah" type="text" class="form-control" required value="{{ data['gol_darah'] if data else '' }}"></div>
+                    <div class="col-md-6"><label>Agama</label><input name="agama" type="text" class="form-control" required value="{{ data['agama'] if data else '' }}"></div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header bg-warning fw-bold">ALAMAT</div>
+                <div class="card-body row g-3">
+                    <div class="col-md-4"><label>Jalan</label><input name="jalan" type="text" class="form-control" required value="{{ data['jalan'] if data else '' }}"></div>
+                    <div class="col-md-4"><label>Gang</label><input name="gang" type="text" class="form-control" required value="{{ data['gang'] if data else '' }}"></div>
+                    <div class="col-md-4"><label>No Rumah</label><input name="no_rumah" type="text" class="form-control" required value="{{ data['no_rumah'] if data else '' }}"></div>
+                    <div class="col-md-3"><label>RT</label><input name="RT" type="number" class="form-control" required value="{{ data['RT'] if data else '' }}"></div>
+                    <div class="col-md-3"><label>RW</label><input name="RW" type="number" class="form-control" required value="{{ data['RW'] if data else '' }}"></div>
+                    <div class="col-md-6"><label>Kel/Desa</label><input name="kel_desa" type="text" class="form-control" required value="{{ data['kel_desa'] if data else '' }}"></div>
+                    <div class="col-md-6"><label>Kecamatan</label><input name="kecamatan" type="text" class="form-control" required value="{{ data['kecamatan'] if data else '' }}"></div>
+                    <div class="col-md-6"><label>Kab/Kota</label><input name="kabkota" type="text" class="form-control" required value="{{ data['kabkota'] if data else '' }}"></div>
+                    <div class="col-md-6"><label>Kode Pos</label><input name="kodepos" type="text" class="form-control" required value="{{ data['kodepos'] if data else '' }}"></div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header bg-warning fw-bold">REKENING BANK</div>
+                <div class="card-body row g-3">
+                    <div class="col-md-6"><label>Nama Bank</label><input name="nama_bank" type="text" class="form-control" required value="{{ data['nama_bank'] if data else '' }}"></div>
+                    <div class="col-md-6"><label>Cabang</label><input name="cabang" type="text" class="form-control" required value="{{ data['cabang'] if data else '' }}"></div>
+                    <div class="col-md-6"><label>No Rekening</label><input name="no_rekening" type="text" class="form-control" required value="{{ data['no_rekening'] if data else '' }}"></div>
+                    <div class="col-md-6"><label>Nama Pemilik</label><input name="nama_pemilik" type="text" class="form-control" required value="{{ data['nama_pemilik'] if data else '' }}"></div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header bg-warning fw-bold">KONTAK</div>
+                <div class="card-body row g-3">
+                    <div class="col-md-6"><label>No telp rumah</label><input name="no_telp_rumah" type="text" class="form-control" required value="{{ data['no_telp_rumah'] if data else '' }}"></div>
+                    <div class="col-md-6"><label>No HP/wa</label><input name="no_hp_rumah" type="text" class="form-control" required value="{{ data['no_hp_rumah'] if data else '' }}"></div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header bg-warning fw-bold">DATA PASANGAN</div>
+                <div class="card-body row g-3">
+                    <div class="col-md-6"><label>Nama</label><input name="nama_pasangan" type="text" class="form-control" required value="{{ data['nama_pasangan'] if data else '' }}"></div>
+                    <div class="col-md-6"><label>No KTP</label><input name="no_ktp_pasangan" type="text" class="form-control" required value="{{ data['no_ktp_pasangan'] if data else '' }}"></div>
+                    <div class="col-md-6"><label>Agama</label><input name="agama_pasangan" type="text" class="form-control" required value="{{ data['agama_pasangan'] if data else '' }}"></div>
+                    <div class="col-md-6">
+                        <label>Jenis Kelamin</label>
+                        <select name="jenis_kelamin" class="form-control" required>
+                            <option value="">-- Pilih --</option>
+                            <option value="L" {{ 'selected' if data and data['jenis_kelamin'] == 'L' else '' }}>Laki-laki</option>
+                            <option value="P" {{ 'selected' if data and data['jenis_kelamin'] == 'P' else '' }}>Perempuan</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Status</label>
+                        <select name="status_pasangan" class="form-control" required>
+                            <option value="">-- Pilih --</option>
+                            <option value="Suami" {{ 'selected' if data and data['status_pasangan'] == 'Suami' else '' }}>Suami</option>
+                            <option value="Istri" {{ 'selected' if data and data['status_pasangan'] == 'Istri' else '' }}>Istri</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header bg-warning fw-bold">DATA ANAK (Sementara jangan isi dlu)</div>
+                <div class="card-body">
+                    <div class="row g-3 align-items-end mb-3">
+                        <div class="col-md-4">
+                            <label for="jumlahAnak" class="form-label">Jumlah Anak:</label>
+                            <input type="number" id="jumlahAnak" min="0" value="0" class="form-control">
+                        </div>
+                        <div class="col-md-auto">
+                            <button type="button" onclick="generateAnakForms()" class="btn btn-info">Buat Form Anak</button>
+                        </div>
+                    </div>
+                    <div id="anakFormsContainer">
+                        </div>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <a href="/data" class="btn btn-primary">Lihat Semua Data</a>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function generateAnakForms() {
+            const jumlahAnak = parseInt(document.getElementById('jumlahAnak').value);
+            const container = document.getElementById('anakFormsContainer');
+            container.innerHTML = ''; // Kosongkan kontainer sebelum menambahkan form baru
+
+            if (isNaN(jumlahAnak) || jumlahAnak < 0) {
+                alert("Masukkan jumlah anak yang valid (angka non-negatif).");
+                return;
+            }
+
+            for (let i = 1; i <= jumlahAnak; i++) {
+                const anakFormDiv = document.createElement('div');
+                anakFormDiv.classList.add('card', 'mb-3'); // Tambahkan kelas Bootstrap card
+                anakFormDiv.innerHTML = `
+                    <div class="card-header bg-info fw-bold">DATA ANAK-${i}</div>
+                    <div class="card-body row g-3">
+                        <div class="col-md-6">
+                            <label for="namaAnak${i}" class="form-label">Nama:</label>
+                            <input type="text" id="namaAnak${i}" name="nama_anak_${i}" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="noKTPAnak${i}" class="form-label">No KTP:</label>
+                            <input type="text" id="noKTPAnak${i}" name="no_ktp_anak_${i}" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="agamaAnak${i}" class="form-label">Agama:</label>
+                            <input type="text" id="agamaAnak${i}" name="agama_anak_${i}" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="jenisKelaminAnak${i}" class="form-label">Jenis Kelamin:</label>
+                            <select id="jenisKelaminAnak${i}" name="jenis_kelamin_anak_${i}" class="form-control" required>
+                                <option value="">-- Pilih --</option>
+                                <option value="L">Laki-laki</option>
+                                <option value="P">Perempuan</option>
+                            </select>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(anakFormDiv);
+            }
+        }
+    </script>
+</body>
+</html>
