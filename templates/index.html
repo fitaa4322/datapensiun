@@ -2,13 +2,33 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Form Input Data P2TEL</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         /* Anda bisa menambahkan styling tambahan di sini jika diperlukan */
+        .card {
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .card-header.bg-warning {
+            background-color: #ffc107 !important; /* Warna Bootstrap warning */
+            color: #343a40; /* Dark text for contrast */
+            font-weight: bold;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
         .card-header.bg-info {
             background-color: #17a2b8 !important; /* Contoh warna lain untuk header anak */
             color: white;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        .form-control, .form-select {
+            border-radius: 5px; /* Rounded form elements */
+        }
+        .btn {
+            border-radius: 5px; /* Rounded buttons */
         }
     </style>
 </head>
@@ -22,9 +42,25 @@
                     <div class="col-md-6"><label>NIK</label><input name="NIK" type="text" class="form-control" required value="{{ data['NIK'] if data else '' }}"></div>
                     <div class="col-md-6"><label>Nama</label><input name="nama" type="text" class="form-control" required value="{{ data['nama'] if data else '' }}"></div>
                     <div class="col-md-6"><label>Tgl Lahir</label><input name="tgl_lahir" type="date" class="form-control" required value="{{ data['tgl_lahir'] if data else '' }}"></div>
-                    <div class="col-md-6"><label>Status</label><input name="status" type="text" class="form-control" required value="{{ data['status'] if data else '' }}"></div>
+                    <div class="col-md-6">
+                        <label>Status</label>
+                        <select name="status" class="form-select" required>
+                            <option value="">-- Pilih --</option>
+                            <option value="Pensiun" {{ 'selected' if data and data['status'] == 'Pensiun' else '' }}>Pensiun</option>
+                            <option value="Meninggal" {{ 'selected' if data and data['status'] == 'Meninggal' else '' }}>Meninggal</option>
+                            </select>
+                    </div>
                     <div class="col-md-6"><label>NPWP</label><input name="NPWP" type="text" class="form-control" required value="{{ data['NPWP'] if data else '' }}"></div>
-                    <div class="col-md-6"><label>Gol Darah</label><input name="gol_darah" type="text" class="form-control" required value="{{ data['gol_darah'] if data else '' }}"></div>
+                    <div class="col-md-6">
+                        <label>Gol Darah</label>
+                        <select name="gol_darah" class="form-select" required>
+                            <option value="">-- Pilih --</option>
+                            <option value="A" {{ 'selected' if data and data['gol_darah'] == 'A' else '' }}>A</option>
+                            <option value="B" {{ 'selected' if data and data['gol_darah'] == 'B' else '' }}>B</option>
+                            <option value="AB" {{ 'selected' if data and data['gol_darah'] == 'AB' else '' }}>AB</option>
+                            <option value="O" {{ 'selected' if data and data['gol_darah'] == 'O' else '' }}>O</option>
+                        </select>
+                    </div>
                     <div class="col-md-6"><label>Agama</label><input name="agama" type="text" class="form-control" required value="{{ data['agama'] if data else '' }}"></div>
                 </div>
             </div>
@@ -39,7 +75,15 @@
                     <div class="col-md-3"><label>RW</label><input name="RW" type="number" class="form-control" required value="{{ data['RW'] if data else '' }}"></div>
                     <div class="col-md-6"><label>Kel/Desa</label><input name="kel_desa" type="text" class="form-control" required value="{{ data['kel_desa'] if data else '' }}"></div>
                     <div class="col-md-6"><label>Kecamatan</label><input name="kecamatan" type="text" class="form-control" required value="{{ data['kecamatan'] if data else '' }}"></div>
-                    <div class="col-md-6"><label>Kab/Kota</label><input name="kabkota" type="text" class="form-control" required value="{{ data['kabkota'] if data else '' }}"></div>
+                    <div class="col-md-6">
+                        <label>Kab/Kota</label>
+                        <select name="kabkota" class="form-select" required>
+                            <option value="">-- Pilih Kab/Kota --</option>
+                            {% for option in kabkota_options %}
+                                <option value="{{ option }}" {{ 'selected' if data and data['kabkota'] == option else '' }}>{{ option }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
                     <div class="col-md-6"><label>Kode Pos</label><input name="kodepos" type="text" class="form-control" required value="{{ data['kodepos'] if data else '' }}"></div>
                 </div>
             </div>
@@ -58,7 +102,7 @@
                 <div class="card-header bg-warning fw-bold">KONTAK</div>
                 <div class="card-body row g-3">
                     <div class="col-md-6"><label>No telp rumah</label><input name="no_telp_rumah" type="text" class="form-control" required value="{{ data['no_telp_rumah'] if data else '' }}"></div>
-                    <div class="col-md-6"><label>No HP/wa</label><input name="no_hp_rumah" type="text" class="form-control" required value="{{ data['no_hp_rumah'] if data else '' }}"></div>
+                    <div class="col-md-6"><label>No HP/wa</label><input name="no_hp_rumah" type="text" class="form-control" required value="{{ data['no_hp'] if data else '' }}"></div>
                 </div>
             </div>
 
@@ -70,7 +114,7 @@
                     <div class="col-md-6"><label>Agama</label><input name="agama_pasangan" type="text" class="form-control" required value="{{ data['agama_pasangan'] if data else '' }}"></div>
                     <div class="col-md-6">
                         <label>Jenis Kelamin</label>
-                        <select name="jenis_kelamin" class="form-control" required>
+                        <select name="jenis_kelamin" class="form-select" required>
                             <option value="">-- Pilih --</option>
                             <option value="L" {{ 'selected' if data and data['jenis_kelamin'] == 'L' else '' }}>Laki-laki</option>
                             <option value="P" {{ 'selected' if data and data['jenis_kelamin'] == 'P' else '' }}>Perempuan</option>
@@ -78,7 +122,7 @@
                     </div>
                     <div class="col-md-6">
                         <label>Status</label>
-                        <select name="status_pasangan" class="form-control" required>
+                        <select name="status_pasangan" class="form-select" required>
                             <option value="">-- Pilih --</option>
                             <option value="Suami" {{ 'selected' if data and data['status_pasangan'] == 'Suami' else '' }}>Suami</option>
                             <option value="Istri" {{ 'selected' if data and data['status_pasangan'] == 'Istri' else '' }}>Istri</option>
@@ -88,65 +132,101 @@
             </div>
 
             <div class="card mb-4">
-                <div class="card-header bg-warning fw-bold">DATA ANAK (Sementara jangan isi dlu)</div>
+                <div class="card-header bg-warning fw-bold">DATA LAIN</div>
+                <div class="card-body row g-3">
+                    <div class="col-md-6">
+                        <label>Kondisi Rumah</label>
+                        <select name="kondisi_rumah" class="form-select">
+                            <option value="">-- Pilih --</option>
+                            <option value="Layak" {{ 'selected' if data and data['Kondisi_Rumah'] == 'Layak' else '' }}>Layak</option>
+                            <option value="Tidak Layak" {{ 'selected' if data and data['Kondisi_Rumah'] == 'Tidak Layak' else '' }}>Tidak Layak</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Tinggal Bersama</label>
+                        <input name="tinggal_bersama" type="text" class="form-control" value="{{ data['Tinggal_bersama'] if data else '' }}">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header bg-warning fw-bold">DATA ANAK</div>
                 <div class="card-body">
                     <div class="row g-3 align-items-end mb-3">
                         <div class="col-md-4">
                             <label for="jumlahAnak" class="form-label">Jumlah Anak:</label>
-                            <input type="number" id="jumlahAnak" min="0" value="0" class="form-control">
+                            <input type="number" id="jumlahAnak" name="jumlahAnak" min="0" value="0" class="form-control">
                         </div>
                         <div class="col-md-auto">
-                            <button type="button" onclick="generateAnakForms()" class="btn btn-info">Buat Form Anak</button>
+                            <button type="button" id="btnBuatFormAnak" class="btn btn-info">Buat Form Anak</button>
                         </div>
                     </div>
-                    <div id="anakFormsContainer">
-                        </div>
+                    <div id="anakFormsContainer" data-children-data="{{ children_data_base64 if children_data_base64 else '' }}">
+                    </div>
                 </div>
             </div>
 
             <div class="text-center">
                 <button type="submit" class="btn btn-primary">Submit</button>
-                <a href="/data" class="btn btn-primary">Lihat Semua Data</a>
+                <a href="/data" class="btn btn-secondary ms-2">Lihat Semua Data</a>
             </div>
         </form>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        function generateAnakForms() {
+        let currentChildrenData = []; // Variabel global untuk menyimpan instance Chart.js
+
+        function generateAnakForms(initialData = null) {
             const jumlahAnak = parseInt(document.getElementById('jumlahAnak').value);
-            const container = document.getElementById('anakFormsContainer');
+            const container = document.getElementById('anakFormsContainer'); // Pastikan container didefinisikan di sini
             container.innerHTML = ''; // Kosongkan kontainer sebelum menambahkan form baru
 
             if (isNaN(jumlahAnak) || jumlahAnak < 0) {
-                alert("Masukkan jumlah anak yang valid (angka non-negatif).");
+                const errorMessageDiv = document.createElement('div');
+                errorMessageDiv.classList.add('alert', 'alert-danger', 'mt-3');
+                errorMessageDiv.textContent = "Masukkan jumlah anak yang valid (angka non-negatif).";
+                container.appendChild(errorMessageDiv);
                 return;
             }
 
+            console.log(`[DEBUG JS] Generating forms for ${jumlahAnak} children.`);
+            console.log(`[DEBUG JS] Initial children data provided for generation:`, initialData);
+
             for (let i = 1; i <= jumlahAnak; i++) {
                 const anakFormDiv = document.createElement('div');
-                anakFormDiv.classList.add('card', 'mb-3'); // Tambahkan kelas Bootstrap card
+                anakFormDiv.classList.add('card', 'mb-3');
+
+                const currentChildData = (initialData && initialData[i - 1]) ? initialData[i - 1] : {};
+
+                console.log(`[DEBUG JS] Child ${i} data:`, currentChildData);
+
+                const namaAnak = currentChildData.nama_anak || '';
+                const noKTPAnak = currentChildData.no_ktp_anak || '';
+                const agamaAnak = currentChildData.agama_anak || '';
+                const jenisKelaminAnak = currentChildData.jenis_kelamin_anak || '';
+
                 anakFormDiv.innerHTML = `
                     <div class="card-header bg-info fw-bold">DATA ANAK-${i}</div>
                     <div class="card-body row g-3">
                         <div class="col-md-6">
                             <label for="namaAnak${i}" class="form-label">Nama:</label>
-                            <input type="text" id="namaAnak${i}" name="nama_anak_${i}" class="form-control" required>
+                            <input type="text" id="namaAnak${i}" name="nama_anak_${i}" class="form-control" value="${namaAnak}" required>
                         </div>
                         <div class="col-md-6">
                             <label for="noKTPAnak${i}" class="form-label">No KTP:</label>
-                            <input type="text" id="noKTPAnak${i}" name="no_ktp_anak_${i}" class="form-control" required>
+                            <input type="text" id="noKTPAnak${i}" name="no_ktp_anak_${i}" class="form-control" value="${noKTPAnak}" required>
                         </div>
                         <div class="col-md-6">
                             <label for="agamaAnak${i}" class="form-label">Agama:</label>
-                            <input type="text" id="agamaAnak${i}" name="agama_anak_${i}" class="form-control" required>
+                            <input type="text" id="agamaAnak${i}" name="agama_anak_${i}" class="form-control" value="${agamaAnak}" required>
                         </div>
                         <div class="col-md-6">
                             <label for="jenisKelaminAnak${i}" class="form-label">Jenis Kelamin:</label>
-                            <select id="jenisKelaminAnak${i}" name="jenis_kelamin_anak_${i}" class="form-control" required>
+                            <select id="jenisKelaminAnak${i}" name="jenis_kelamin_anak_${i}" class="form-select" required>
                                 <option value="">-- Pilih --</option>
-                                <option value="L">Laki-laki</option>
-                                <option value="P">Perempuan</option>
+                                <option value="L" ${jenisKelaminAnak === 'L' ? 'selected' : ''}>Laki-laki</option>
+                                <option value="P" ${jenisKelaminAnak === 'P' ? 'selected' : ''}>Perempuan</option>
                             </select>
                         </div>
                     </div>
@@ -154,6 +234,64 @@
                 container.appendChild(anakFormDiv);
             }
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const anakFormsContainer = document.getElementById('anakFormsContainer'); // Deklarasi di scope ini
+
+            if (anakFormsContainer) {
+                const childrenDataAttribute = anakFormsContainer.dataset.childrenData;
+                console.log("[DEBUG JS] childrenDataAttribute raw (Base64):", childrenDataAttribute);
+
+                if (childrenDataAttribute) {
+                    try {
+                        const decodedString = atob(childrenDataAttribute);
+                        console.log("[DEBUG JS] Decoded string:", decodedString);
+                        currentChildrenData = JSON.parse(decodedString);
+                        console.log("[DEBUG JS] Parsed initialChildrenData (to global):", currentChildrenData);
+                    } catch (e) {
+                        console.error("[ERROR JS] Failed to parse children data JSON after Base64 decode:", e);
+                        console.error("[ERROR JS] Raw data attribute was:", childrenDataAttribute);
+                        currentChildrenData = [];
+                    }
+                } else {
+                    currentChildrenData = [];
+                }
+
+                document.getElementById('jumlahAnak').value = currentChildrenData.length;
+                console.log(`[DEBUG JS] Setting jumlahAnak input value to: ${currentChildrenData.length} on page load.`);
+                generateAnakForms(currentChildrenData);
+
+                const btnBuatFormAnak = document.getElementById('btnBuatFormAnak');
+                if (btnBuatFormAnak) {
+                    btnBuatFormAnak.addEventListener('click', function() {
+                        const existingFormsData = [];
+                        // Mengambil data dari form yang sudah ada sebelum membuat ulang
+                        const existingChildCards = anakFormsContainer.querySelectorAll('.card.mb-3'); // Gunakan anakFormsContainer yang sudah dideklarasikan
+                        existingChildCards.forEach((card, index) => {
+                            const namaAnak = card.querySelector(`[name="nama_anak_${index + 1}"]`)?.value || '';
+                            const noKTPAnak = card.querySelector(`[name="no_ktp_anak_${index + 1}"]`)?.value || '';
+                            const agamaAnak = card.querySelector(`[name="agama_anak_${index + 1}"]`)?.value || '';
+                            const jenisKelaminAnak = card.querySelector(`[name="jenis_kelamin_anak_${index + 1}"]`)?.value || '';
+
+                            existingFormsData.push({
+                                nama_anak: namaAnak,
+                                no_ktp_anak: noKTPAnak,
+                                agama_anak: agamaAnak,
+                                jenis_kelamin_anak: jenisKelaminAnak
+                            });
+                        });
+                        
+                        // Perbarui currentChildrenData dengan data yang diambil dari form yang sudah ada
+                        currentChildrenData = existingFormsData;
+
+                        // Panggil generateAnakForms dengan data yang sudah di-extract dari form yang ada
+                        generateAnakForms(currentChildrenData);
+                    });
+                }
+            } else {
+                console.log('[DEBUG JS] anakFormsContainer element not found. This should not happen if HTML is correct.');
+            }
+        });
     </script>
 </body>
 </html>

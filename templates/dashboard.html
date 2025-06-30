@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Data P2TEL</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif; /* Menggunakan font Inter */
+        }
+        .chart-container {
+            position: relative;
+            height: 300px; /* Tinggi tetap untuk grafik */
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .card {
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .card-header {
+            font-weight: bold;
+            background-color: #0d6efd; /* Warna biru Bootstrap primary */
+            color: white;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        .summary-card .card-body {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #0d6efd;
+            text-align: center;
+            padding: 20px;
+        }
+        .summary-card .card-header {
+            background-color: #6c757d; /* Warna abu-abu Bootstrap secondary */
+        }
+        .filter-section {
+            background-color: #e9ecef;
+            padding: 20px;
+            border-radius: 10px; /* Rounded corners */
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .btn-back-to-data {
+            margin-top: 30px;
+        }
+        .btn {
+            border-radius: 5px; /* Rounded buttons */
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-4">
+        <h2 class="text-center mb-5">Dashboard Data P2TEL - Jakarta Selatan</h2>
+
+        <div class="filter-section">
+            <h4 class="mb-3">Filter Data Dashboard</h4>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label for="filterAgama" class="form-label">Agama:</label>
+                    <select id="filterAgama" class="form-select rounded">
+                        <option value="">Semua Agama</option>
+                        {% for agama in filter_agama_options %}
+                        <option value="{{ agama }}">{{ agama }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="filterStatus" class="form-label">Status Anggota:</label>
+                    <select id="filterStatus" class="form-select rounded">
+                        <option value="">Semua Status</option>
+                        {% for status in filter_status_options %}
+                        <option value="{{ status }}">{{ status }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="filterKabKota" class="form-label">Kab/Kota:</label>
+                    <select id="filterKabKota" class="form-select rounded">
+                        <option value="">Semua Kab/Kota</option>
+                        {% for kabkota in filter_kabkota_options %}
+                        <option value="{{ kabkota }}">{{ kabkota }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-12 text-end">
+                    <button id="applyFilter" class="btn btn-primary rounded me-2">Terapkan Filter</button>
+                    <button id="resetFilter" class="btn btn-secondary rounded">Reset Filter</button>
+                    <button id="exportCsv" class="btn btn-success rounded ms-2">Unduh CSV</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- I. Ringkasan Umum Anggota -->
+        <h3 class="mb-3 text-primary">I. Ringkasan Umum Anggota</h3>
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card summary-card">
+                    <div class="card-header">Total Anggota</div>
+                    <div class="card-body" id="totalAnggota">{{ total_anggota }}</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card summary-card">
+                    <div class="card-header">Total Anak Terdata</div>
+                    <div class="card-body" id="totalAnak">{{ total_anak }}</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card summary-card">
+                    <div class="card-header">Rata-rata Anak per Anggota</div>
+                    <div class="card-body" id="rataRataAnak">{{ rata_rata_anak }}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">Anggota Berdasarkan Jenis Kelamin</div>
+                    <div class="card-body">
+                        <div class="chart-container"><canvas id="jenisKelaminChart"></canvas></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">Anggota Berdasarkan Gol. Darah</div>
+                    <div class="card-body">
+                        <div class="chart-container"><canvas id="golDarahChart"></canvas></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">Anggota Berdasarkan Agama</div>
+                    <div class="card-body">
+                        <div class="chart-container"><canvas id="agamaChart"></canvas></div>
+                    </div>
+                </div>
+            </div>
+            <!-- II. Data Geografis -->
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">Anggota Berdasarkan Kota/Kabupaten</div>
+                    <div class="card-body">
+                        <div class="chart-container"><canvas id="kabKotaChart"></canvas></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="/data" class="btn btn-primary rounded btn-back-to-data">Kembali ke Tabel Data</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Variabel global untuk menyimpan instance Chart.js
+        let jenisKelaminChartInstance, golDarahChartInstance, agamaChartInstance, kabKotaChartInstance;
+
+        // Fungsi untuk menghasilkan warna acak yang konsisten untuk setiap label jika diperlukan
+        // Atau Anda bisa menggunakan palet warna tetap untuk konsistensi
+        function getChartColors(num) {
+            const colors = [
+                'rgba(13, 110, 253, 0.7)',  // Primary blue
+                'rgba(108, 117, 125, 0.7)', // Secondary gray
+                'rgba(25, 135, 84, 0.7)',   // Success green
+                'rgba(220, 53, 69, 0.7)',   // Danger red
+                'rgba(255, 193, 7, 0.7)',   // Warning yellow
+                'rgba(102, 16, 242, 0.7)',  // Indigo
+                'rgba(23, 162, 184, 0.7)',  // Info cyan
+                'rgba(253, 126, 20, 0.7)',  // Orange
+                'rgba(111, 66, 193, 0.7)',  // Purple
+                'rgba(203, 102, 102, 0.7)', // Custom light red
+                'rgba(102, 203, 102, 0.7)', // Custom light green
+                'rgba(102, 102, 203, 0.7)'  // Custom light blue
+            ];
+            // Jika lebih banyak dari warna yang ditentukan, ulangi atau hasilkan acak
+            if (num <= colors.length) {
+                return colors.slice(0, num);
+            } else {
+                const randomColors = [...colors];
+                for (let i = colors.length; i < num; i++) {
+                    const r = Math.floor(Math.random() * 200); // Lebih gelap sedikit
+                    const g = Math.floor(Math.random() * 200);
+                    const b = Math.floor(Math.random() * 200);
+                    randomColors.push(`rgba(${r}, ${g}, ${b}, 0.7)`);
+                }
+                return randomColors;
+            }
+        }
+
+        function createOrUpdateChart(chartId, chartType, labels, data, chartInstanceRef) {
+            const ctx = document.getElementById(chartId).getContext('2d');
+            const backgroundColors = getChartColors(labels.length);
+            const borderColors = backgroundColors.map(color => color.replace('0.7', '1')); // Border lebih solid
+
+            if (chartInstanceRef) {
+                // Update chart yang sudah ada
+                chartInstanceRef.data.labels = labels;
+                chartInstanceRef.data.datasets[0].data = data;
+                chartInstanceRef.data.datasets[0].backgroundColor = backgroundColors;
+                chartInstanceRef.data.datasets[0].borderColor = borderColors;
+                chartInstanceRef.update();
+                return chartInstanceRef; // Kembalikan instance yang diperbarui
+            } else {
+                // Buat chart baru
+                return new Chart(ctx, {
+                    type: chartType,
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Jumlah',
+                            data: data,
+                            backgroundColor: backgroundColors,
+                            borderColor: borderColors,
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top',
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    precision: 0 // Pastikan tick y-axis adalah bilangan bulat
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    autoSkip: false, // Jangan lewati label x
+                                    maxRotation: 45,  // Rotate label jika terlalu panjang
+                                    minRotation: 45
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        function loadDashboardData(filters = {}) {
+            const params = new URLSearchParams(filters);
+            fetch(`/dashboard_data?${params.toString()}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Perbarui kartu ringkasan
+                    document.getElementById('totalAnggota').textContent = data.total_anggota;
+                    document.getElementById('totalAnak').textContent = data.total_anak;
+                    document.getElementById('rataRataAnak').textContent = data.rata_rata_anak;
+
+                    // Perbarui atau buat grafik
+                    jenisKelaminChartInstance = createOrUpdateChart('jenisKelaminChart', 'bar', data.jenis_kelamin.labels, data.jenis_kelamin.values, jenisKelaminChartInstance);
+                    golDarahChartInstance = createOrUpdateChart('golDarahChart', 'doughnut', data.gol_darah.labels, data.gol_darah.values, golDarahChartInstance);
+                    agamaChartInstance = createOrUpdateChart('agamaChart', 'bar', data.agama.labels, data.agama.values, agamaChartInstance);
+                    kabKotaChartInstance = createOrUpdateChart('kabKotaChart', 'bar', data.kabkota.labels, data.kabkota.values, kabKotaChartInstance);
+                })
+                .catch(error => console.error('Error fetching dashboard data:', error));
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inisialisasi grafik dengan data yang dilewatkan dari Flask saat halaman pertama kali dimuat
+            jenisKelaminChartInstance = createOrUpdateChart('jenisKelaminChart', 'bar', JSON.parse('{{ jenis_kelamin_labels | safe }}'), JSON.parse('{{ jenis_kelamin_values | safe }}'), null);
+            golDarahChartInstance = createOrUpdateChart('golDarahChart', 'doughnut', JSON.parse('{{ gol_darah_labels | safe }}'), JSON.parse('{{ gol_darah_values | safe }}'), null);
+            agamaChartInstance = createOrUpdateChart('agamaChart', 'bar', JSON.parse('{{ agama_labels | safe }}'), JSON.parse('{{ agama_values | safe }}'), null);
+            kabKotaChartInstance = createOrUpdateChart('kabKotaChart', 'bar', JSON.parse('{{ kabkota_labels | safe }}'), JSON.parse('{{ kabkota_values | safe }}'), null);
+
+            const applyFilterBtn = document.getElementById('applyFilter');
+            const resetFilterBtn = document.getElementById('resetFilter');
+            const exportCsvBtn = document.getElementById('exportCsv');
+
+            applyFilterBtn.addEventListener('click', function() {
+                const filters = {
+                    agama: document.getElementById('filterAgama').value,
+                    status: document.getElementById('filterStatus').value,
+                    kabkota: document.getElementById('filterKabKota').value
+                };
+                loadDashboardData(filters);
+            });
+
+            resetFilterBtn.addEventListener('click', function() {
+                // Reset nilai filter dropdown
+                document.getElementById('filterAgama').value = '';
+                document.getElementById('filterStatus').value = '';
+                document.getElementById('filterKabKota').value = '';
+                loadDashboardData(); // Muat ulang dashboard tanpa filter
+            });
+
+            exportCsvBtn.addEventListener('click', function() {
+                const filters = {
+                    agama: document.getElementById('filterAgama').value,
+                    status: document.getElementById('filterStatus').value,
+                    kabkota: document.getElementById('filterKabKota').value
+                };
+                const params = new URLSearchParams(filters);
+                window.location.href = `/export_dashboard_csv?${params.toString()}`;
+            });
+        });
+    </script>
+</body>
+</html>
